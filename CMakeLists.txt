@@ -21,6 +21,8 @@ endif()
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+find_package(Ceres REQUIRED)
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -41,7 +43,7 @@ message(" ")
 add_executable(
         StructureFromMotionTest
         tests/example.cpp
-        tests/test_pose.cpp)
+        tests/test_pose.cpp tests/test_simple_reprojection_error.cpp tests/constants.h)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
@@ -78,6 +80,8 @@ target_include_directories(
     /Users/meganfinch/googletest/googletest
     /Users/meganfinch/googletest/googletest/include
     /Users/meganfinch/CLionProjects/StructureFromMotion/headers/
+    /Users/meganfinch/ceres-solver/include
+    /Users/meganfinch/ceres-solver/cmake-build-release/config
 )
 
 target_link_directories(
@@ -109,4 +113,5 @@ target_link_libraries(
     gtest
     gtest_main
     SFMLib
+    ceres
 )

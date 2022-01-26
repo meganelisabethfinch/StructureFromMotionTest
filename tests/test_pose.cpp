@@ -2,12 +2,11 @@
 // Created by Megan Finch on 21/01/2022.
 //
 
-#include <opencv2/core/matx.hpp>
+#include "constants.h"
 
+#include <opencv2/core/matx.hpp>
 #include <gtest/gtest.h>
 #include <pose.h>
-
-const double ALLOWABLE_ERROR = 0.01;
 
 TEST(PoseTest, ConvertPoseToPoseVector) {
     // Arrange
@@ -19,11 +18,11 @@ TEST(PoseTest, ConvertPoseToPoseVector) {
     PoseVector expected(-0.006224129814654589, -0.5381986498832703, 0.006053373217582703, 0.7086335420608521, -0.002795530250295997, 0.2611511647701263);
 
     // Act
-    PoseVector actual = pose.getPoseVector();
+    PoseVector actual = pose.toPoseVector();
 
     // Assert
     for (size_t i = 0; i < 6; i++) {
-        EXPECT_NEAR(actual(i), expected(i), ALLOWABLE_ERROR);
+        EXPECT_NEAR(actual(i), expected(i), ALLOWED_ERROR);
     }
 }
 
@@ -38,17 +37,15 @@ TEST(PoseTest, InvertPoseToPoseVector) {
 
     // Act
     // Convert to pose vector and back
-    auto pv = pose.getPoseVector();
+    auto pv = pose.toPoseVector();
     auto actual = Pose(pv).getProjectionMatrix();
 
     // Assert
     // If both conversions are correct, actual = expected, give or take rounding errors
     for (size_t r = 0; r < 3; r++) {
         for (size_t c = 0; c < 4; c++) {
-            EXPECT_NEAR(actual(r,c), expected(r,c), ALLOWABLE_ERROR);
+            EXPECT_NEAR(actual(r,c), expected(r,c), ALLOWED_ERROR);
         }
     }
-
-    // EXPECT_EQ(0,1);
 }
 

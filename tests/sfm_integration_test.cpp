@@ -10,7 +10,7 @@
 #include <cli_util.h>
 #include <sfm_util.h>
 
-class SFMUtilitiesTest : public testing::Test {
+class SFMIntegrationTest : public testing::Test {
 protected:
     // Per test-suite set-up, called before the first test in this test suite.
     // Can be omitted if not needed.
@@ -19,7 +19,7 @@ protected:
     }
 };
 
-TEST(SFMUtilitiesTest, CorrectNumberOfMatches) {
+TEST(SFMIntegrationTest, CorrectNumberOfMatches) {
     // TODO: put this all into per-test-fixture set-up
     std::vector<Image> mImages;
     std::vector<Features> mImageFeatures;
@@ -28,7 +28,7 @@ TEST(SFMUtilitiesTest, CorrectNumberOfMatches) {
     std::vector<cv::String> filenames;
     cv::glob(directory + "/*.png", filenames, false);
 
-    auto detector = CLIUtilities::CreateDetector(DetectorType::SIFT);
+    auto detector = CLIUtilities::CreateDetector(DetectorType::ORB);
 
     for (const auto& fn : filenames) {
         cv::Mat data = cv::imread(fn, cv::IMREAD_COLOR);
@@ -38,7 +38,7 @@ TEST(SFMUtilitiesTest, CorrectNumberOfMatches) {
         mImageFeatures.emplace_back(Features(detector, image));
     }
 
-    auto matcher = CLIUtilities::CreateMatcher(MatcherType::FLANNBASED);
+    auto matcher = CLIUtilities::CreateMatcher(MatcherType::BRUTEFORCE_HAMMING);
     auto mFeatureMatchMatrix = Matches(matcher, mImageFeatures);
 
     // Act
@@ -51,11 +51,11 @@ TEST(SFMUtilitiesTest, CorrectNumberOfMatches) {
 
     // Assert
     for (size_t i = 0; i < imagePairs.size(); i++) {
-        EXPECT_NEAR(actual.at(i), expected.at(i), 5);
+        EXPECT_EQ(actual.at(i), expected.at(i));
     }
 }
 
-TEST(SFMUtilitiesTest, SortHomographyInliersCorrectly) {
+TEST(SFMIntegrationTest, SortHomographyInliersCorrectly) {
     // Arrange
     // TODO: put this all into per-test-fixture set-up
     std::vector<Image> mImages;
@@ -65,7 +65,7 @@ TEST(SFMUtilitiesTest, SortHomographyInliersCorrectly) {
     std::vector<cv::String> filenames;
     cv::glob(directory + "/*.png", filenames, false);
 
-    auto detector = CLIUtilities::CreateDetector(DetectorType::SIFT);
+    auto detector = CLIUtilities::CreateDetector(DetectorType::ORB);
 
     for (const auto& fn : filenames) {
         cv::Mat data = cv::imread(fn, cv::IMREAD_COLOR);
@@ -75,7 +75,7 @@ TEST(SFMUtilitiesTest, SortHomographyInliersCorrectly) {
         mImageFeatures.emplace_back(Features(detector, image));
     }
 
-    auto matcher = CLIUtilities::CreateMatcher(MatcherType::FLANNBASED);
+    auto matcher = CLIUtilities::CreateMatcher(MatcherType::BRUTEFORCE_HAMMING);
     auto mFeatureMatchMatrix = Matches(matcher, mImageFeatures);
 
     // Act
@@ -95,7 +95,7 @@ TEST(SFMUtilitiesTest, SortHomographyInliersCorrectly) {
     EXPECT_EQ(kv_pair->first, 0.0792079);
 }
 
-TEST(SFMUtilitiesTest, CountHomographyInliersCorrectly) {
+TEST(SFMIntegrationTest, CountHomographyInliersCorrectly) {
     // Arrange
     // TODO: put this all into per-test-fixture set-up
     std::vector<Image> mImages;
@@ -105,7 +105,7 @@ TEST(SFMUtilitiesTest, CountHomographyInliersCorrectly) {
     std::vector<cv::String> filenames;
     cv::glob(directory + "/*.png", filenames, false);
 
-    auto detector = CLIUtilities::CreateDetector(DetectorType::SIFT);
+    auto detector = CLIUtilities::CreateDetector(DetectorType::ORB);
 
     for (const auto& fn : filenames) {
         cv::Mat data = cv::imread(fn, cv::IMREAD_COLOR);
@@ -115,7 +115,7 @@ TEST(SFMUtilitiesTest, CountHomographyInliersCorrectly) {
         mImageFeatures.emplace_back(Features(detector, image));
     }
 
-    auto matcher = CLIUtilities::CreateMatcher(MatcherType::FLANNBASED);
+    auto matcher = CLIUtilities::CreateMatcher(MatcherType::BRUTEFORCE_HAMMING);
     auto mFeatureMatchMatrix = Matches(matcher, mImageFeatures);
 
     // Act

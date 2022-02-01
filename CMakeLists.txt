@@ -43,7 +43,7 @@ message(" ")
 add_executable(
         StructureFromMotionTest
         tests/example.cpp
-        tests/test_pose.cpp tests/test_simple_reprojection_error.cpp tests/constants.h tests/sfm_utils_test.cpp)
+        tests/test_pose.cpp tests/test_simple_reprojection_error.cpp tests/constants.h tests/sfm_integration_test.cpp)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")

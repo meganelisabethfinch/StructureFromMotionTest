@@ -10,6 +10,7 @@
 
 #include <cost/simple_reprojection_error.h>
 #include <types.h>
+#include <sfm_util.h>
 
 TEST(SimpleReprojectionErrorTest, ComputeCorrectError) {
     /*
@@ -33,4 +34,33 @@ TEST(SimpleReprojectionErrorTest, ComputeCorrectError) {
     // Assert
     EXPECT_NEAR(actual[0], expected[0], ALLOWED_ERROR);
     EXPECT_NEAR(actual[1], expected[1], ALLOWED_ERROR);
+}
+
+TEST(SimpleReprojectionError, BothReprojectionErrorsAreSame) {
+    // Arrange
+    /*
+    cv::Point2d point2d(19, -509);
+
+    PoseVector pv(-0.004077719524502754, -0.251457691192627, 0.005174771882593632, 0.9919545650482178, -0.0116012804210186, 0.1260616481304169);
+    Pose pose = Pose(pv);
+
+    cv::Vec3d point3d(-0.033097, -0.765754, 3.75711);
+    double focal = 2500;
+
+    std::vector<cv::Point2d> points2d = { point2d };
+    std::vector<cv::Point3d> points3d = { point3d };
+
+    SimpleReprojectionError computeError = SimpleReprojectionError(point2d.x, point2d.y);
+    double actual2 [2] = {0,0};
+
+    // Act
+    auto actual1 = SFMUtilities::getReprojectionErrors(points2d, points3d, camera, pose);
+    computeError(pv.val, point3d.val, &focal, actual2);
+
+*/
+
+    // Assert
+    //std::cout << actual1
+    // EXPECT_EQ(0, 1);
+
 }

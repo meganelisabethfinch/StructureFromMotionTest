@@ -50,3 +50,14 @@ TEST(MidpointTriangulatorTest, TriangulateCorrectPointWhenApproximateIntersectio
     EXPECT_EQ(actual.y, expected.y);
     EXPECT_EQ(actual.z, expected.z);
 };
+
+TEST(MidpointTriangulatorTest, BackprojectPointToRay) {
+    // Arrange
+
+    // Act
+
+    // Assert
+    EXPECT_EQ(0,1);
+
+    // TODO: what IS correct behaviour for this one?
+};

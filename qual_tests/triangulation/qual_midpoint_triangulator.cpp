@@ -33,9 +33,11 @@ TEST(MidpointTriangulatorQual, VisualiseImagePoints) {
     // Act
     for (size_t i = 0; i < features.size(); i++) {
         auto pt = features.getPoint(i);
+        // Get image point
         auto pt3d = midpoint->backProjectPointToPoint(pt, intrinsic, pose);
         Point3DInMap pt3dMap;
         pt3dMap.setPoint(pt3d.x, pt3d.y, pt3d.z);
+        pt3dMap.originatingViews.emplace(0, i);
         pc.addPoint(pt3dMap);
     }
 

@@ -43,7 +43,11 @@ message(" ")
 add_executable(
         StructureFromMotionTest
         tests/example.cpp
-        tests/test_pose.cpp tests/test_simple_reprojection_error.cpp tests/constants.h tests/test_point_cloud.cpp tests/triangulation/test_midpoint_triangulator.cpp
+        tests/test_pose.cpp
+        tests/test_simple_reprojection_error.cpp
+        tests/constants.h
+        tests/test_point_cloud.cpp
+        tests/triangulation/test_midpoint_triangulator.cpp
         evaluation/triangulation_comparison.cpp
         qual_tests/triangulation/qual_midpoint_triangulator.cpp)
 

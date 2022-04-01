@@ -5,6 +5,8 @@
 #include <gtest/gtest.h>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/calib3d.hpp>
+
 #include <triangulation/midpoint_triangulator.h>
 #include <cli_util.h>
 #include "triangulation/triangulator.h"
@@ -83,13 +85,32 @@ TEST(MidpointTriangulatorQual, VisualiseImagePointsSeveralImages) {
     auto midpoint = cv::makePtr<MidpointTriangulator>();
     PointCloud pc;
 
+    std::ofstream file("/Users/meganfinch/CLionProjects/StructureFromMotionTest/data/out/qual_tests/project3_errors.txt");
+
     // Act
     for (size_t i = 0; i < mImages.size(); i++) {
+        auto P = mPoses.at(i);
+        auto K = mCameras.at(i);
         auto features = mFeatures.at(i);
+
         for (size_t j = 0; j < features.size(); j++) {
             auto pt = features.getPoint(j);
             // Get image point
-            auto pt3d = midpoint->backProjectPointToPoint(pt, mCameras.at(i), mPoses.at(i));
+            auto pt3d = midpoint->backProjectPointToPoint(pt, K, P);
+
+            // Measure reprojection error
+            std::vector<cv::Point2d> reprojectedPoints(1);
+            std::vector<cv::Point3d> points3d = { pt3d };
+            auto rvec = P.getRotationMatrix();
+            auto tvec = P.getTranslationVector();
+            cv::projectPoints(points3d, rvec, tvec, K.getCameraMatrix(), cv::Mat(), reprojectedPoints);
+            file << "(" << pt.x << "," << pt.y << ")     (" << reprojectedPoints[0].x << "," << reprojectedPoints[0].y << ")";
+            if (cv::norm(pt - reprojectedPoints[0]) > 1) {
+                file << "    LARGE REPROJECTION ERROR";
+            }
+            file << std::endl;
+
+            // Add image point to point cloud to visualise
             Point3DInMap pt3dMap;
             pt3dMap.setPoint(pt3d.x, pt3d.y, pt3d.z);
             pt3dMap.originatingViews.emplace(i, j);
@@ -97,7 +118,9 @@ TEST(MidpointTriangulatorQual, VisualiseImagePointsSeveralImages) {
         }
     }
 
-    pc.toPlyFile("/Users/meganfinch/CLionProjects/StructureFromMotionTest/data/out/qual_tests/visual2.ply",
+    file.close();
+
+    pc.toPlyFile("/Users/meganfinch/CLionProjects/StructureFromMotionTest/data/out/qual_tests/project3_visual.ply",
                  mFeatures,
                  mImages);
 }

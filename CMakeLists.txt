@@ -23,6 +23,10 @@ find_package(Threads REQUIRED)
 
 find_package(Ceres REQUIRED)
 
+find_package(PCL REQUIRED COMPONENTS common io filters features surface)
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -120,4 +124,5 @@ target_link_libraries(
     gtest_main
     SFMLib
     ceres
+    ${PCL_LIBRARIES}
 )

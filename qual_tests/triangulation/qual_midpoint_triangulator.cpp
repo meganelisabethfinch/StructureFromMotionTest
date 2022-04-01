@@ -8,6 +8,7 @@
 #include <triangulation/midpoint_triangulator.h>
 #include <cli_util.h>
 #include "triangulation/triangulator.h"
+#include <fstream>
 
 TEST(MidpointTriangulatorQual, VisualiseImagePoints) {
     // Arrange
@@ -45,8 +46,6 @@ TEST(MidpointTriangulatorQual, VisualiseImagePoints) {
     pc.toPlyFile("/Users/meganfinch/CLionProjects/StructureFromMotionTest/data/out/qual_tests/visual.ply",
                  { features },
                  { image });
-
-    EXPECT_EQ(0,1);
 }
 
 TEST(MidpointTriangulatorQual, VisualiseImagePointsSeveralImages) {
